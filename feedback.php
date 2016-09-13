@@ -2,12 +2,12 @@
 	require 'connect.php';
 	session_start();
 	$name=$_SESSION['firstname'];
-	$q=mysql_query("select current_status from reg_user where firstname='$name'");
+	/*$q=mysql_query("select current_status from reg_user where firstname='$name'");
 	$qr=mysql_fetch_assoc($q);
 	if($qr['current_status']!='Active')
 	{
 		header("Location:index.php");
-	}
+	}*/
 	$time=time();
 	$starttime=$_SESSION['starttime'];
 	$mobilenumber=$_SESSION['mobilenumber'];
@@ -27,6 +27,8 @@
 ?>
 <html>
 	<head>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+		<script src="myscript.js" type="text/javascript"></script>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<style>
 			* {
@@ -140,7 +142,7 @@
 			<?php
 				
 				
-				$query_button=mysql_query("select firstname from reg_user where firstname='$name'");
+				$query_button=mysql_query("select firstname from user_info where firstname='$name'");
 				$row=mysql_fetch_assoc($query_button);
 				$res=$row['firstname'];
 				//echo $res;

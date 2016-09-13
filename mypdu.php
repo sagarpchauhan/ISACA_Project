@@ -1,44 +1,17 @@
 <?php
-require 'connect.php';
-session_start();
-$time=time();
-$mobilenumber=$_SESSION['mobilenumber'];
-$name=$_SESSION['firstname'];
-$starttime=$_SESSION['starttime'];
-
-//echo "Welcome $name<br/>";
-//echo $starttime;
-
-$duration=floor(($time-$starttime)/60);
-mysql_query("update reg_user set duration='$duration' where mobile_number=$mobilenumber");
-$qrun=mysql_query("select totaltime from reg_user where mobile_number='$mobilenumber'");
-$qrow=mysql_fetch_assoc($qrun);
-$prevtime=$qrow['totaltime'];
-//echo "previous time was $prevtime";
-$updatetime=$duration+$prevtime;
-
-$num=$updatetime;
-
-/*$query2=mysql_query("select pdu from reg_user where mobile_number='$mobilenumber'");
-$qres2=mysql_fetch_assoc($query2);
-$pdu=$qres2['pdu']*/;
-$quo=floor($num/15);
-$rem=$quo%2;
-
-if($rem!=0)
-		{
-			$ntimes=($quo/2)+0.5;
-			$pdu=$ntimes*0.5;
-			//echo "pdu:$pdu";	
-		}
-else{
-	$pdu=($quo/2)*0.5;
-}
-
+	require 'connect.php';
+	session_start();
+	$macp=$_SESSION['mac'];
+	$q=mysql_query("select * from time1 where mac='$macp'");
+	$r=mysql_fetch_assoc($q);
+	$duration=$r['duration'];
+	$totaltime=$r['totaltime_min'];
+	$pdu=$r['pdu'];
 ?>
-
 <html>
 	<head>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+		<script src="myscript.js" type="text/javascript"></script>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<style>
 			* {
@@ -159,14 +132,12 @@ else{
 			</form>
 			
 			<?php
-				
-				$query_button=mysql_query("select firstname from reg_user where firstname='$name'");
+				$name=$_SESSION['firstname'];
+				$query_button=mysql_query("select firstname from user_info where firstname='$name'");
 				$row=mysql_fetch_assoc($query_button);
 				$res=$row['firstname'];
-				//echo $res;
 				if($res=='sagar967')
 				{
-					//echo "this is not sagar";
 					echo "<form action='adminreport.php'><input type='submit' value='Admin     ' id='adminreport'></form>";
 				}
 			?>	
@@ -183,15 +154,15 @@ else{
 				 	<table style="width:650">
 						<tr>
 							<th>Name</th>
-							<th>CURRENT<br>SESSION<br>Duration</th>
-							<th>Total<br>Time</th>
+							<th>CURRENT<br>SESSION<br>Duration (minutes)</th>
+							<th>Total<br>Time (minutes)</th>
 							<th>CPE</th>
 						</tr>
 						<tr>
 							<td><?php echo $name;?></td>
-							<td><?php echo "$duration min";?></td>
-							<td><?php echo "$updatetime min";?></td>
-							<td><?php echo "$pdu";?></td>
+							<td><?php echo $duration;?></td>
+							<td><?php echo $totaltime;?></td>
+							<td><?php echo $pdu;?></td>
 						</tr>
 					</table>		
 					

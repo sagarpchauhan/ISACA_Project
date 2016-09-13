@@ -11,26 +11,16 @@
 	$mobilenumber=$_SESSION['mobilenumber'];
 	$name=$_SESSION['firstname'];
 	
-	$time=time();
-	$starttime=$_SESSION['starttime'];
-	$mobilenumber=$_SESSION['mobilenumber'];
-	$duration=floor(($time-$starttime)/60);
-	mysql_query("update reg_user set duration='$duration' where mobile_number=$mobilenumber");
+	
 	
 	if(isset($_FILES['file']['name']))
 		{
 			$name = $_FILES['file']['name'];
 			$tmp_name  = $_FILES['file']['tmp_name'];
-			//echo $tmp_name;
+			
 			move_uploaded_file($tmp_name, "image/".$name);
 			mysql_query("update image set img='$name'");
-			//$query=mysql_query("select img from image");
-			//$img_db=mysql_fetch_assoc($query);
-			//echo $img_db['img']; 
 			
-			
-			//$imgname=$img_db['img'];
-			//echo $imgname;
 		}
 		
 ?>
@@ -38,6 +28,8 @@
 
 <html>
 	<head>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+		<script src="myscript.js" type="text/javascript"></script>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<style>
 			* {
@@ -144,72 +136,68 @@
 	<body>
 		
 		<div class="header">
-		<h1>ADMIN <?php 
-					$query=mysql_query('select img from image');
-					$img_db=mysql_fetch_assoc($query);
-					//echo $img_db['img']; 
-					$imgname=$img_db['img'];
-					
-		            echo "<image src=\"image/$imgname\" width=\"150\" height=\"60\" style=\"float:right\"></h1>"; ?>
+			<h1>ADMIN <?php 
+			$query=mysql_query('select img from image');
+			$img_db=mysql_fetch_assoc($query);
+			$imgname=$img_db['img'];
+			echo "<image src=\"image/$imgname\" width=\"150\" height=\"60\" style=\"float:right\"></h1>"; ?>
 		</div>
 				
 		<div class="row">
-		<div class="col-1">
-		    <form action="mypdu.php">
-				<input type="submit" id="mypdu" value="<<Back          ">
-			</form>
-			
-			 <form action="updateagenda.php">
-				<input type="submit" id="addevent" value="Add Events    ">
-			</form>			
-			
-			<form action="surveysetting.php">
-				<input type="submit" id="survey_setting" value="Survey Setting">
-			</form>
-			
-			<form action="adminreport.php" method="POST">
-				<input type="submit" value="Export to Excel" name="export_excel" id="export_excel">
-			</form>
-			
-			<form action="adminreport.php" method="post" enctype="multipart/form-data">
-			   <input type="file" name="file">
-			   <input type="submit" value="upload">
-			</form>
+			<div class="col-1">
+				<form action="mypdu.php">
+					<input type="submit" id="mypdu" value="<<Back          ">
+				</form>
+				
+				<form action="updateagenda.php">
+					<input type="submit" id="addevent" value="Add Events    ">
+				</form>			
+				
+				<form action="surveysetting.php">
+					<input type="submit" id="survey_setting" value="Survey Setting">
+				</form>
+				
+				<form action="adminreport.php" method="POST">
+					<input type="submit" value="Export to Excel" name="export_excel" id="export_excel">
+				</form>
+				
+				<form action="adminreport.php" method="post" enctype="multipart/form-data">
+				   <input type="file" name="file">
+				   <input type="submit" value="upload">
+				</form>
 
-		</div>
-		<div class="col-2" style="overflow-x:auto;">	
-				<?php
-					require 'connect.php';
-					
-					$quer=mysql_query("select firstname,mobile_number from reg_user where firstname='sagar967' and mobile_number='$mobilenumber'");
-					if(mysql_num_rows($quer)>0){
+			</div>
+			<div class="col-2" style="overflow-x:auto;">	
+					<?php
+						$quer=mysql_query("select firstname,mobile_number from user_info where firstname='sagar967' and mobile_number='$mobilenumber'");
+						if(mysql_num_rows($quer)>0){
+							
+						$query=mysql_query("select * from user_info");
+						$num=mysql_num_rows($query);
 						
-					$query=mysql_query("select * from reg_user");
-					$num=mysql_num_rows($query);
-					
-					if($num > 0){
-						echo "<table><tr><th>Name</th><th>Mac<br> ID</th><th>Start<br>Time</th></tr>";
-						
-						while($row=mysql_fetch_assoc($query)){
-							$fn=$row['firstname'];
-							$macid=$row['mac'];
-							$sttime=$row['reg_time_epoch'];
-							echo "<tr><td>$fn</td><td>$macid</td><td>$sttime</td></tr>";
+						if($num > 0){
+							echo "<table><tr><th>Name</th><th>Mobile<br>Number</th><th>Mac<br> ID</th></tr>";
+							
+							while($row=mysql_fetch_assoc($query)){
+								$fn=$row['firstname'];
+								$macid=$row['mac'];
+								$mobno=$row['mobile_number'];
+								echo "<tr><td>$fn</td><td>$mobno</td><td>$macid</td></tr>";
+							}
+							echo "</table>";
 						}
-						echo "</table>";
 					}
-				}
-				
-				else{
-					echo "<x>You are not admin.</x>";
-				}	
 					
-					
-				?>
-				
+					else{
+						echo "<x>You are not admin.</x>";
+					}	
 						
-				
-		</div>	
+						
+					?>
+					
+							
+					
+			</div>	
 		</div>
 				
 		<div class="footer">

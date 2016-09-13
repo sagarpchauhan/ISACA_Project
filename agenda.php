@@ -1,16 +1,25 @@
 <?php
 	require 'connect.php';
+	$ip=$_SERVER['REMOTE_ADDR'];
+	$mac = shell_exec('arp -a '.escapeshellarg(trim($ip)));
+	$find="Physical";
+	$pos=strpos($mac,$find);
+	$macp=substr($mac,($pos+42),26);
 	session_start();
+	$_SESSION['mac']=$macp;
+	/*
 	$time=time();
 	$starttime=$_SESSION['starttime'];
 	$mobilenumber=$_SESSION['mobilenumber'];
 	$duration=floor(($time-$starttime)/60);
 	mysql_query("update reg_user set duration='$duration' where mobile_number=$mobilenumber");
-	
+	*/
 ?>
 
 <html>
 	<head>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+		<script src="myscript.js" type="text/javascript"></script>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<style>
 			* {
@@ -110,7 +119,6 @@
 		<h1>AGENDA <?php 
 					$query=mysql_query('select img from image');
 					$img_db=mysql_fetch_assoc($query);
-					//echo $img_db['img']; 
 					$imgname=$img_db['img'];
 					
 		            echo "<image src=\"image/$imgname\" width=\"130\" height=\"60\" style=\"float:right\"></h1>"; ?>
@@ -133,15 +141,14 @@
 					</form>
 					
 					<?php
-						
 						$name=$_SESSION['firstname'];
-						$query_button=mysql_query("select firstname from reg_user where firstname='$name'");
+						$query_button=mysql_query("select firstname from user_info where firstname='$name'");
 						$row=mysql_fetch_assoc($query_button);
 						$res=$row['firstname'];
-						//echo $res;
+						
 						if($res=='sagar967')
 						{
-							//echo "this is not sagar";
+							
 							echo "<form action='adminreport.php'><input type='submit' value='Admin     ' id='adminreport'></form>";
 						}
 					?>
@@ -190,7 +197,7 @@
 								  </tr>";
 						}
 							echo "</table>";
-							//echo $query_res['event'].$query_res['starttime']."-->".$query_res['endtime']."<br>";	
+							
 							
 						
 				    ?>

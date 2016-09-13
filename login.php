@@ -1,54 +1,43 @@
 <?php
 	require 'connect.php';
 	if (isset($_POST['firstname'])&&isset($_POST['mobno'])){
-	$fn=$_POST['firstname'];
-	$mobno=$_POST['mobno'];
-	$fn=mysql_real_escape_string($fn);
-	$mobno=mysql_real_escape_string($mobno);
-	$time=time();
-	//$mobno=9673398847;
-	
-	if(!empty($fn)&&!empty($mobno))
-	{
-		$query_run=mysql_query("select firstname from reg_user where firstname='$fn' and mobile_number='$mobno'");
-		if(mysql_num_rows($query_run)==0)
+		$fn=$_POST['firstname'];
+		$mobno=$_POST['mobno'];
+		$fn=mysql_real_escape_string($fn);
+		$mobno=mysql_real_escape_string($mobno);
+		$time=time();
+			
+		if(!empty($fn)&&!empty($mobno))
 		{
-				echo "<script>alert ('match not found...')</script>";
+			$query_run=mysql_query("select firstname from user_info where firstname='$fn' and mobile_number='$mobno'");
+			if(mysql_num_rows($query_run)==0)
+			{
+					echo "<script>alert ('match not found...')</script>";
+			}
+			else{
+				session_start();
+				$_SESSION['firstname']=$fn;
+				$_SESSION['mobilenumber']=$mobno;
+				$_SESSION['starttime']=$time;
+				
+				 date_default_timezone_set('Asia/Calcutta');
+				 $currentDateTime=date('d-m-Y h:i:s A');
+				
+				 $newDateTime = date('h:i:s A', strtotime($currentDateTime));
+				 
+				
+				mysql_query("update reg_user set time='$time',timea='$newDateTime',current_status='Active' where mobile_number='$mobno'");
+				mysql_query("update time1 set duration='0',curtime='$time',tmpcurtime='$time'");
+				header('Location:agenda.php');
+			}
+			
 		}
-		else{
-			session_start();
-			$_SESSION['firstname']=$fn;
-			$_SESSION['mobilenumber']=$mobno;
-			$_SESSION['starttime']=$time;
-			
-			 date_default_timezone_set('Asia/Calcutta');
-			 $currentDateTime=date('d-m-Y h:i:s A');
-			
-    		 $newDateTime = date('h:i:s A', strtotime($currentDateTime));
-			 //echo $newDateTime;
-			
-			mysql_query("update reg_user set time='$time',timea='$newDateTime',current_status='Active' where mobile_number='$mobno'");
-			//$ltime=mysql_query("select time from reg_user where mobile_number=$mobno");
-			//$_SESSION['ltime']=$ltime;
-			header('Location:agenda.php');
+		else
+		{
+			echo "<script>alert ('all fields required')</script>";
 		}
-		
 	}
-	else
-	{
-		echo "<script>alert ('all fields required')</script>";
-	}
-	
 ?>
-
-
-	
-	<?php
-	//movePage(301,"http://www.google.com/");
-
-	}
-	?>
-
 
 <html>
 	<head>

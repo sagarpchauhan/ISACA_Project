@@ -61,13 +61,17 @@
 	$time=time();
 	date_default_timezone_set('Asia/Calcutta');
 	$currentDateTime=date('d-m-Y h:i:s A');
-			
-    $newDateTime = date('h:i:s A', strtotime($currentDateTime));
-	
+		
+    $ip=$_SERVER['REMOTE_ADDR'];
+	$mac = shell_exec('arp -a '.escapeshellarg(trim($ip)));
+	$find="Physical";
+	$pos=strpos($mac,$find);
+	$macp=substr($mac,($pos+42),26);
+		
 	if(!empty($fn)&&!empty($mobno)){
 		
-		$query1=mysql_query("select mobile_number from reg_user where mobile_number='$mobno'");
-		$query2=mysql_query("select mac from reg_user where mac='$macp'");
+		$query1=mysql_query("select mobile_number from user_info where mobile_number='$mobno'");
+		$query2=mysql_query("select mac from user_info where mac='$macp'");
 		$num1=mysql_num_rows($query1);
 		$num2=mysql_num_rows($query2);
 		if($num1!=0 || $num2!=0)
@@ -83,19 +87,15 @@
 		}
 		else
 		{
-		mysql_query("insert into reg_user values('$fn','$mobno','$email','$memid','$macp','$time','0','0','0','$newDateTime','Active','$kind','$time','$newDateTime')")or die(mysql_error());
+		mysql_query("insert into user_info values('$fn','$mobno','$email','$memid','$kind','$macp','$currentDateTime')")or die(mysql_error());
 		session_start();
 		$_SESSION['firstname']=$fn;
 		$_SESSION['mobilenumber']=$mobno;
 		$_SESSION['starttime']=$time;
+		mysql_query("insert into time1 values(0,0,'$time','$time',0,0,0,'Active','$macp')");
 		header('Location:agenda.php');
 		}
 	}
-	
-	else{
-		//echo "<script>alert('All mandatory fields are required.')</script>";
-	}
-		
 	
 	
 ?>
