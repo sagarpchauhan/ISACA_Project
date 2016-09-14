@@ -20,6 +20,15 @@
 	<head>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 		<script src="myscript.js" type="text/javascript"></script>
+		<script src="script.js" type="text/javascript"></script>
+		<script type="text/javascript" charset="utf-8">
+ 
+			function addmsg(type, msg){
+			 
+			$('#notification_count').html(msg);
+			 
+			}
+		</script>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<style>
 			* {
@@ -68,9 +77,34 @@
 				}
 			}
 
+				
 			
-						
-			#mypdu,#agenda,#feedback,#logout,#pmi,#adminreport {
+			#notification_count
+			{
+			padding: 0px 5px 5px 12px;
+			background: #cc0000;
+			color: #ffffff;
+			font-weight: bold;
+			font-size:12px;
+			margin-left: 85px;
+			border-radius:9px;
+			-moz-border-radius: 9px;
+			-webkit-border-radius: 9px;
+			position:relative;
+			left:-10%;
+			}
+
+			#notification{
+						  background-color: #ffffff;
+							color: #061f2d;
+							padding: -1% 1%;
+							border: none;
+							border-radius: 2%;
+							cursor: pointer;
+							box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+						}
+			
+			#mypdu,#agenda,#feedback,#logout,#pmi,#adminreport{
 			  background-color: #EAF0F3;
 				color: #061f2d;
 				padding: 5% 35%;
@@ -80,6 +114,9 @@
 				cursor: pointer;
 				box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
 			}
+			
+			
+			
 			#mypdu:hover,#agenda:hover,#feedback:hover,#logout,#pmi:hover,#adminreport:hover {
 			  background-color:#061f2d;
 			  color:#EAF0F3
@@ -105,7 +142,7 @@
 			  text-align: left; 
 			}
 			
-			a{
+			.footer a{
 				color:#ffffff;
 				
 			}
@@ -123,7 +160,16 @@
 					
 		            echo "<image src=\"image/$imgname\" width=\"130\" height=\"60\" style=\"float:right\"></h1>"; ?>
 		</div>
-
+		
+		<div class="row">
+		<div class="col-1 aside">
+			<form action="showmsg.php">
+				<span id="notification_count">5</span><br>
+				<input type="image" id="notification" src="bell.png" alt="Submit" width="50" height="50">
+			</form>
+		</div>	
+		</div>
+		
 		<div class="row">
 
 			<div class="col-1 aside">

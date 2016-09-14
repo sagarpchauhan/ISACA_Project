@@ -4,7 +4,7 @@
 							header("Content-Type:application/vnd.ms-excel");
 							header("Content-Disposition:attachment;filename=report.xls");
 						}
-				?>
+?>
 <?php
 	require 'connect.php';
 	session_start();
@@ -83,7 +83,7 @@
 				}
 			}
 			
-			#mypdu,#addevent,#survey_setting,#export_excel {
+			#mypdu,#addevent,#survey_setting,#export_excel,#sendmessage {
 			  background-color: #EAF0F3;
 				color: #061f2d;
 				padding: 5% 35%;
@@ -93,7 +93,7 @@
 				cursor: pointer;
 				box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
 			}
-			#mypdu:hover,#addevent:hover,#survey_setting:hover,#export_excel:hover {
+			#mypdu:hover,#addevent:hover,#survey_setting:hover,#export_excel:hover,#sendmessage:hover {
 			  background-color:#061f2d;
 			  color:#EAF0F3;
 			}
@@ -151,7 +151,11 @@
 				
 				<form action="updateagenda.php">
 					<input type="submit" id="addevent" value="Add Events    ">
-				</form>			
+				</form>
+
+				<form action="message.php">
+					<input type="submit" id="sendmessage" value="Send Message">
+				</form>	
 				
 				<form action="surveysetting.php">
 					<input type="submit" id="survey_setting" value="Survey Setting">
@@ -194,9 +198,6 @@
 						
 						
 					?>
-					
-							
-					
 			</div>	
 		</div>
 				
