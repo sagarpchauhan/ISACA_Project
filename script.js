@@ -16,7 +16,7 @@
 			);
 			},
 			error: function(XMLHttpRequest, textStatus, errorThrown){
-			addmsg("error", textStatus + " (" + errorThrown + ")");
+			addmsg1("error", textStatus + " (" + errorThrown + ")");
 			setTimeout(
 			waitForMsg1,
 			15000);

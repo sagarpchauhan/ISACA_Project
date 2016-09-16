@@ -173,7 +173,7 @@
 			</div>
 			<div class="col-2" style="overflow-x:auto;">	
 					<?php
-						$quer=mysql_query("select firstname,mobile_number from user_info where firstname='sagar967' and mobile_number='$mobilenumber'");
+						$quer=mysql_query("select * from user_info where usertype='admin'");
 						if(mysql_num_rows($quer)>0){
 							
 						$query=mysql_query("select * from user_info");

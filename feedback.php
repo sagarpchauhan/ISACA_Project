@@ -2,12 +2,8 @@
 	require 'connect.php';
 	session_start();
 	$name=$_SESSION['firstname'];
-	/*$q=mysql_query("select current_status from reg_user where firstname='$name'");
-	$qr=mysql_fetch_assoc($q);
-	if($qr['current_status']!='Active')
-	{
-		header("Location:index.php");
-	}*/
+	$mobno=$_SESSION['mobilenumber'];
+	$macp=$_SESSION['mac'];
 	$time=time();
 	$starttime=$_SESSION['starttime'];
 	$mobilenumber=$_SESSION['mobilenumber'];
@@ -125,7 +121,19 @@
 				cursor: pointer;
 				box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
 			}
-			#mypdu:hover,#agenda:hover,#logout,#pmi:hover,#adminreport:hover {
+
+			#messageadmin{
+			  background-color: #EAF0F3;
+				color: #061f2d;
+				padding: 5% 28%;
+				margin: 3% 0;
+				border: none;
+				border-radius: 2%;
+				cursor: pointer;
+				box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+			}
+			
+			#messageadmin:hover,#mypdu:hover,#agenda:hover,#logout,#pmi:hover,#adminreport:hover {
 			  background-color:#061f2d;
 			  color:#EAF0F3
 			}
@@ -155,14 +163,35 @@
 		
 		</div>
 		
-		<div class="row">
-			<div class="col-1">
-				<form action="showmsg.php">
-					<span id="notification_count"></span><br>
-					<input type="image" id="notification" src="bell.png" alt="Submit" width="50" height="50">
-				</form>
-			</div>	
-		</div>
+		<?php
+				$query_user=mysql_query("select usertype from user_info where firstname='$name' and mobile_number='$mobno'");
+				$row_user=mysql_fetch_assoc($query_user);
+				$user=$row_user['usertype'];
+				if($user=='admin')
+				{
+					echo "<div class=\"row\">
+					<div class=\"col-1 \">
+						<form action=\"showmsgadmin.php\">
+							<span id=\"notification_count\"></span><br>
+							<input type=\"image\" id=\"notification\" src=\"bell.png\" alt=\"Submit\" width=\"50\" height=\"50\">
+						</form>
+					</div>	
+					</div>";
+				}
+				else{
+					echo "<div class=\"row\">
+					<div class=\"col-1 \">
+						<form action=\"showmsg.php\">
+							<span id=\"notification_count\"></span><br>
+							<input type=\"image\" id=\"notification\" src=\"bell.png\" alt=\"Submit\" width=\"50\" height=\"50\">
+						</form>
+					</div>	
+					</div>";
+					
+				}
+			
+
+		?>
 		
 		<div class="row">
 
@@ -181,16 +210,13 @@
 			</form>
 			
 			<?php
-				
-				
-				$query_button=mysql_query("select firstname from user_info where firstname='$name'");
-				$row=mysql_fetch_assoc($query_button);
-				$res=$row['firstname'];
-				//echo $res;
-				if($res=='sagar967')
+				if($user=='admin')
 				{
-					//echo "this is not sagar";
 					echo "<form action='adminreport.php'><input type='submit' value='Admin     ' id='adminreport'></form>";
+				}
+				else
+				{
+					echo "<form action='messageadmin.php'><input type='submit' value='Message Admin' id='messageadmin'></form>";
 				}
 			?>	
 			

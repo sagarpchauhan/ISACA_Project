@@ -6,7 +6,11 @@
 		$fn=mysql_real_escape_string($fn);
 		$mobno=mysql_real_escape_string($mobno);
 		$time=time();
-			
+		$ip=$_SERVER['REMOTE_ADDR'];
+		$mac = shell_exec('arp -a '.escapeshellarg(trim($ip)));
+		$find="Physical";
+		$pos=strpos($mac,$find);
+		$macp=substr($mac,($pos+42),26);		
 		if(!empty($fn)&&!empty($mobno))
 		{
 			$query_run=mysql_query("select firstname from user_info where firstname='$fn' and mobile_number='$mobno'");
@@ -19,15 +23,15 @@
 				$_SESSION['firstname']=$fn;
 				$_SESSION['mobilenumber']=$mobno;
 				$_SESSION['starttime']=$time;
-				
+				$_SESSION['mac']=$macp;	
 				 date_default_timezone_set('Asia/Calcutta');
 				 $currentDateTime=date('d-m-Y h:i:s A');
 				
 				 $newDateTime = date('h:i:s A', strtotime($currentDateTime));
 				 
 				
-				mysql_query("update reg_user set time='$time',timea='$newDateTime',current_status='Active' where mobile_number='$mobno'");
-				mysql_query("update time1 set duration='0',curtime='$time',tmpcurtime='$time'");
+				//mysql_query("update reg_user set time='$time',timea='$newDateTime',current_status='Active' where mobile_number='$mobno'");
+				mysql_query("update time1 set duration='0',curtime='$time',tmpcurtime='$time',status='Active' where mac='$macp'");
 				header('Location:agenda.php');
 			}
 			

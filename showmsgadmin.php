@@ -125,7 +125,7 @@
 					$img_db=mysql_fetch_assoc($query);
 					$imgname=$img_db['img'];
 					
-		            echo "<image src=\"image/$imgname\" width=\"125\" height=\"60\" style=\"float:right\"></h1>"; ?>
+		            echo "<image src=\"image/$imgname\" width=\"130\" height=\"60\" style=\"float:right\"></h1>"; ?>
 		</div>
 		
 		<div class="row">
@@ -155,7 +155,7 @@
 					
 					mysql_query("update messagestatus set read_count='$count',unread_count=0 where macid='$macp'");
 					
-					$q=mysql_query("select * from message where recipient='user' order by id desc");
+					$q=mysql_query("select * from message where recipient='admin' order by id desc");
 					echo "<table>
 							<tr>
 								<th>Message</th>

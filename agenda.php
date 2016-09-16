@@ -1,12 +1,9 @@
 <?php
 	require 'connect.php';
-	$ip=$_SERVER['REMOTE_ADDR'];
-	$mac = shell_exec('arp -a '.escapeshellarg(trim($ip)));
-	$find="Physical";
-	$pos=strpos($mac,$find);
-	$macp=substr($mac,($pos+42),26);
 	session_start();
-	$_SESSION['mac']=$macp;
+	$macp=$_SESSION['mac'];
+	$fn=$_SESSION['firstname'];
+	$mobno=$_SESSION['mobilenumber'];
 	/*
 	$time=time();
 	$starttime=$_SESSION['starttime'];
@@ -28,6 +25,12 @@
 			$('#notification_count').html(msg);
 			 
 			}
+			function addmsg2(type, msg){
+			 
+			$('#notification_count1').html(msg);
+			 
+			}
+			
 		</script>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<style>
@@ -79,7 +82,7 @@
 
 				
 			
-			#notification_count
+			#notification_count,#notification_count1
 			{
 			padding: 0px 5px 5px 12px;
 			background: #cc0000;
@@ -115,9 +118,19 @@
 				box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
 			}
 			
+			#messageadmin{
+			  background-color: #EAF0F3;
+				color: #061f2d;
+				padding: 5% 28%;
+				margin: 3% 0;
+				border: none;
+				border-radius: 2%;
+				cursor: pointer;
+				box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+			}
 			
 			
-			#mypdu:hover,#agenda:hover,#feedback:hover,#logout,#pmi:hover,#adminreport:hover {
+			#mypdu:hover,#agenda:hover,#feedback:hover,#logout,#pmi:hover,#adminreport:hover,#messageadmin:hover {
 			  background-color:#061f2d;
 			  color:#EAF0F3
 			}
@@ -161,14 +174,36 @@
 		            echo "<image src=\"image/$imgname\" width=\"130\" height=\"60\" style=\"float:right\"></h1>"; ?>
 		</div>
 		
-		<div class="row">
-		<div class="col-1 aside">
-			<form action="showmsg.php">
-				<span id="notification_count">5</span><br>
-				<input type="image" id="notification" src="bell.png" alt="Submit" width="50" height="50">
-			</form>
-		</div>	
-		</div>
+		<?php
+				$query_user=mysql_query("select usertype from user_info where firstname='$fn' and mobile_number='$mobno'");
+				$row_user=mysql_fetch_assoc($query_user);
+				$user=$row_user['usertype'];
+				if($user=='admin')
+				{
+					echo "<div class=\"row\">
+					<div class=\"col-1 aside\">
+						<form action=\"showmsgadmin.php\">
+							<span id=\"notification_count\"></span><br>
+							<input type=\"image\" id=\"notification\" src=\"bell.png\" alt=\"Submit\" width=\"50\" height=\"50\">
+						</form>
+					</div>	
+					</div>";
+				}
+				else{
+					echo "<div class=\"row\">
+					<div class=\"col-1 aside\">
+						<form action=\"showmsg.php\">
+							<span id=\"notification_count\"></span><br>
+							<input type=\"image\" id=\"notification\" src=\"bell.png\" alt=\"Submit\" width=\"50\" height=\"50\">
+						</form>
+					</div>	
+					</div>";
+					
+				}
+			
+
+		?>
+		
 		
 		<div class="row">
 
@@ -187,15 +222,15 @@
 					</form>
 					
 					<?php
-						$name=$_SESSION['firstname'];
-						$query_button=mysql_query("select firstname from user_info where firstname='$name'");
-						$row=mysql_fetch_assoc($query_button);
-						$res=$row['firstname'];
-						
-						if($res=='sagar967')
+						if($user=='admin')
 						{
 							
 							echo "<form action='adminreport.php'><input type='submit' value='Admin     ' id='adminreport'></form>";
+						}
+						
+						else
+						{
+							echo "<form action='messageadmin.php'><input type='submit' value='Message Admin' id='messageadmin'></form>";
 						}
 					?>
 

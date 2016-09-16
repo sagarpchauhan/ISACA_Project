@@ -8,7 +8,7 @@
 	{
 		$msg=mysql_real_escape_string($_POST['message']);
 		
-		mysql_query("insert into message values('','$msg','$time','$date','user')");
+		mysql_query("insert into message values('','$msg','$time','$date','admin')");
 		mysql_query("update messagestatus set flag='false'");
 		
 	}
@@ -123,7 +123,7 @@
 
 			<div class="col-1">
 			
-				<form action="adminreport.php">
+				<form action="agenda.php">
 				  <input type="submit" id="back" value="<<Back  ">
 			    </form>
 			
@@ -132,7 +132,7 @@
 
 			<div class="col-2 aside">
 			
-			<form action="message.php" method="post">
+			<form action="messageadmin.php" method="post">
 				<textarea id="message" name="message" rows="8" cols="25"></textarea><br>
 				<input type="submit" id="send" value="send">
 			</form>

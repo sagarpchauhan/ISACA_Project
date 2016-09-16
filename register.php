@@ -62,11 +62,7 @@
 	date_default_timezone_set('Asia/Calcutta');
 	$currentDateTime=date('d-m-Y h:i:s A');
 		
-    $ip=$_SERVER['REMOTE_ADDR'];
-	$mac = shell_exec('arp -a '.escapeshellarg(trim($ip)));
-	$find="Physical";
-	$pos=strpos($mac,$find);
-	$macp=substr($mac,($pos+42),26);
+    
 		
 	if(!empty($fn)&&!empty($mobno)){
 		
@@ -87,11 +83,12 @@
 		}
 		else
 		{
-		mysql_query("insert into user_info values('$fn','$mobno','$email','$memid','$kind','$macp','$currentDateTime')")or die(mysql_error());
+		mysql_query("insert into user_info values('$fn','$mobno','$email','$memid','$kind','$macp','$currentDateTime','user')")or die(mysql_error());
 		session_start();
 		$_SESSION['firstname']=$fn;
 		$_SESSION['mobilenumber']=$mobno;
 		$_SESSION['starttime']=$time;
+		$_SESSION['mac']=$macp;
 		mysql_query("insert into time1 values(0,0,'$time','$time',0,0,0,'Active','$macp')");
 		header('Location:agenda.php');
 		}

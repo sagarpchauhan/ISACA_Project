@@ -3,11 +3,8 @@
 	require 'connect.php';
 	
 	//Getting macp.
-	$ip=$_SERVER['REMOTE_ADDR'];
-	$mac = shell_exec('arp -a '.escapeshellarg(trim($ip)));
-	$find="Physical";
-	$pos=strpos($mac,$find);
-	$macp=substr($mac,($pos+42),26);
+	session_start();
+	$macp=$_SESSION['mac'];
 	
 	//Calculating totaltime	
 	$q=mysql_query("select * from time1 where mac='$macp'");
