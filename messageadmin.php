@@ -8,9 +8,9 @@
 	{
 		$msg=mysql_real_escape_string($_POST['message']);
 		
-		mysql_query("insert into message values('','$msg','$time','$date','admin')");
-		mysql_query("update messagestatus set flag='false'");
-		
+		mysql_query("insert into message values('','$msg','$time','$date','admin','unread')");
+		//mysql_query("update messagestatus set flag='false'");
+		mysql_query("update messagestatus inner join user_info on messagestatus.macid=user_info.mac set messagestatus.status='unread',messagestatus.flag='false' where user_info.usertype='admin'");	
 	}
 ?>
 
@@ -110,7 +110,7 @@
 	<body>
 
 		<div class="header">
-		<h1>SESSION<?php 
+		<h1>MESSAGE<?php 
 					$query=mysql_query('select img from image');
 					$img_db=mysql_fetch_assoc($query);
 					//echo $img_db['img']; 

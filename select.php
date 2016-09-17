@@ -8,7 +8,7 @@
 	$row_user=mysql_fetch_assoc($query_user);
 	$user=$row_user['usertype'];
 	
-	mysql_query("insert ignore into messagestatus values('$macp','0','0','false')");
+	mysql_query("insert ignore into messagestatus values('$macp','0','0','false','unread')");
 	
 	if($user=='admin')
 	{

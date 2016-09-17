@@ -82,7 +82,22 @@
 				box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
 			}
 			
+			#animation{
+				width: 55px;
+				height: 38px;
+				color:#ffffff;
+				border-radius:9px;
+				font-size:14px;
+				animation-name: new_message;
+				animation-duration: 2s;
+				animation-iteration-count: infinite;
+			}
 			
+			@keyframes new_message {
+				0%   {background-color: red;}
+				100%  {background-color: #cc0000;}
+				
+			}
 			
 			#mypdu:hover,#agenda:hover,#feedback:hover,#logout,#pmi:hover,#adminreport:hover {
 			  background-color:#061f2d;
@@ -147,7 +162,31 @@
 					$pos=strpos($mac,$find);
 					$macp=substr($mac,($pos+42),26);
 					
-					
+					$q1=mysql_query("select status from messagestatus where macid='$macp'");
+					$r1=mysql_fetch_assoc($q1);
+					$status=$r1['status'];
+					if($status=='unread')
+					{
+						
+						$q2=mysql_query("select * from message where recipient='user' order by id desc");
+						
+						//unread messages count in $r3.
+						$q3=mysql_query("select unread_count from messagestatus where macid='$macp'");
+						$r3=mysql_fetch_assoc($q3);
+						$num_unread=$r3['unread_count'];
+						while($num_unread!=0)
+						{
+							//echo $num_unread;
+							$r2=mysql_fetch_assoc($q2);
+							$id=$r2['id'];
+							$message=$r2['message'];
+							mysql_query("update message set status='unread' where id='$id'");
+							//echo $r2['id']."-->".$r2['message']."<br>";
+							$id--;
+							$num_unread--;
+							
+						}
+					}
 					$count=$_SESSION['msgcount'];
 					$rcount=$_SESSION['rcount'];
 					$urcount=$_SESSION['urcount'];
@@ -155,7 +194,7 @@
 					
 					mysql_query("update messagestatus set read_count='$count',unread_count=0 where macid='$macp'");
 					
-					$q=mysql_query("select * from message where recipient='user' order by id desc");
+					$q=mysql_query("select * from message where recipient='user' and status='unread' order by id desc");
 					echo "<table>
 							<tr>
 								<th>Message</th>
@@ -169,14 +208,30 @@
 						$time=$row['time'];
 						$date=$row['date'];
 						echo "<tr>
+								<td>$message <span id=\"animation\">NEW</span></td>
+								<td>$time</td>
+								<td>$date</td>
+							  </tr>";
+					}
+					
+					$q=mysql_query("select * from message where recipient='user' and status='read' order by id desc");
+					
+					while($row=mysql_fetch_assoc($q))
+					{
+						$message=$row['message'];
+						$time=$row['time'];
+						$date=$row['date'];
+						echo "<tr>
 								<td>$message</td>
 								<td>$time</td>
 								<td>$date</td>
 							  </tr>";
 					}
 					echo "</table>";
-				?>
-				
+					
+					mysql_query("update message set status='read' where recipient='user'");
+					mysql_query("update messagestatus set status='read' where macid='$macp'");
+				?>			
 			</div>
 			
 		</div>

@@ -1,17 +1,19 @@
 <?php
 	require 'connect.php';
 	date_default_timezone_set('Asia/Calcutta');
+	
 	$time=date('h:i:s A');
 	$date=date('d-m-y l');
-	//echo $date;
+	
 	if(isset($_POST['message'])&&!empty($_POST['message']))
 	{
 		$msg=mysql_real_escape_string($_POST['message']);
 		
-		mysql_query("insert into message values('','$msg','$time','$date','user')");
-		mysql_query("update messagestatus set flag='false'");
-		
+		mysql_query("insert into message values('','$msg','$time','$date','user','unread')");
+		//mysql_query("update messagestatus set flag='false' ");
+		mysql_query("update messagestatus inner join user_info on messagestatus.macid=user_info.mac set messagestatus.status='unread',messagestatus.flag='false' where user_info.usertype='user'");
 	}
+	
 ?>
 
 <html>
@@ -110,7 +112,7 @@
 	<body>
 
 		<div class="header">
-		<h1>SESSION<?php 
+		<h1>MESSAGE<?php 
 					$query=mysql_query('select img from image');
 					$img_db=mysql_fetch_assoc($query);
 					//echo $img_db['img']; 
@@ -133,7 +135,18 @@
 			<div class="col-2 aside">
 			
 			<form action="message.php" method="post">
-				<textarea id="message" name="message" rows="8" cols="25"></textarea><br>
+				<textarea id="message" name="message" rows="8" cols="25"></textarea><br><br>
+				<select name="adminselect">
+				<option value="user">User</option>
+				<?php
+					$query1=mysql_query("select firstname from user_info where usertype='admin'");
+					while($row1=mysql_fetch_assoc($query1))
+					{
+						$name=$row1['firstname'];
+						echo "<option value=\"$name\">$name</option>";
+					}
+				?>
+				</select><br>
 				<input type="submit" id="send" value="send">
 			</form>
 			
